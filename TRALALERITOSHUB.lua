@@ -4,7 +4,6 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local SoundService = game:GetService("SoundService")
 local Lighting = game:GetService("Lighting")
-local HapticService = game:GetService("HapticService")
 
 local player = Players.LocalPlayer
 local pGui = player:WaitForChild("PlayerGui")
@@ -26,20 +25,20 @@ screenGui.ResetOnSpawn = false
 screenGui.Parent = pGui
 
 if not UserInputService.TouchEnabled then
-	screenGui:Destroy()
-	return
+        screenGui:Destroy()
+        return
 end
 
 local function applyStyle(obj, radius)
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, radius or 12)
-	corner.Parent = obj
-	
-	local stroke = Instance.new("UIStroke")
-	stroke.Thickness = 2
-	stroke.Color = Color3.fromRGB(255, 255, 255)
-	stroke.Transparency = 0.8
-	stroke.Parent = obj
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, radius or 12)
+        corner.Parent = obj
+
+        local stroke = Instance.new("UIStroke")
+        stroke.Thickness = 2
+        stroke.Color = Color3.fromRGB(255, 255, 255)
+        stroke.Transparency = 0.8
+        stroke.Parent = obj
 end
 
 local introFrame = Instance.new("Frame")
@@ -64,17 +63,17 @@ iAspect.AspectRatio = 1
 iAspect.Parent = introImg
 
 local function squish(obj)
-	clickSound:Play()
-	local originalSize = obj:GetAttribute("OriginalSize")
-	if not originalSize then
-		originalSize = obj.Size
-		obj:SetAttribute("OriginalSize", originalSize)
-	end
-	local down = TweenService:Create(obj, TweenInfo.new(0.05, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(originalSize.X.Scale * 0.8, originalSize.X.Offset * 0.8, originalSize.Y.Scale * 0.8, originalSize.Y.Offset * 0.8)})
-	local up = TweenService:Create(obj, TweenInfo.new(0.1, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Size = originalSize})
-	down:Play()
-	down.Completed:Wait()
-	up:Play()
+        clickSound:Play()
+        local originalSize = obj:GetAttribute("OriginalSize")
+        if not originalSize then
+                originalSize = obj.Size
+                obj:SetAttribute("OriginalSize", originalSize)
+        end
+        local down = TweenService:Create(obj, TweenInfo.new(0.05, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(originalSize.X.Scale * 0.8, originalSize.X.Offset * 0.8, originalSize.Y.Scale * 0.8, originalSize.Y.Offset * 0.8)})
+        local up = TweenService:Create(obj, TweenInfo.new(0.1, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Size = originalSize})
+        down:Play()
+        down.Completed:Wait()
+        up:Play()
 end
 
 local notifContainer = Instance.new("Frame")
@@ -90,41 +89,41 @@ notifLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 notifLayout.Padding = UDim.new(0.02, 0)
 
 local function sendNotification(msg, userId)
-	local frame = Instance.new("Frame")
-	frame.Size = UDim2.new(0.9, 0, 0.15, 0)
-	frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	frame.BorderSizePixel = 0
-	frame.Parent = notifContainer
-	applyStyle(frame, 10)
-	
-	local img = Instance.new("ImageLabel")
-	img.Size = UDim2.new(0.8, 0, 0.8, 0)
-	img.Position = UDim2.new(0.05, 0, 0.1, 0)
-	img.Image = Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size150x150)
-	img.BackgroundTransparency = 1
-	img.Parent = frame
-	applyStyle(img, 100)
-	
-	local aspect = Instance.new("UIAspectRatioConstraint")
-	aspect.AspectRatio = 1
-	aspect.Parent = img
-	
-	local txt = Instance.new("TextLabel")
-	txt.Size = UDim2.new(0.7, 0, 0.8, 0)
-	txt.Position = UDim2.new(0.28, 0, 0.1, 0)
-	txt.Text = msg
-	txt.TextColor3 = Color3.fromRGB(255, 255, 255)
-	txt.Font = Enum.Font.FredokaOne
-	txt.TextScaled = true
-	txt.BackgroundTransparency = 1
-	txt.Parent = frame
+        local frame = Instance.new("Frame")
+        frame.Size = UDim2.new(0.9, 0, 0.15, 0)
+        frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        frame.BorderSizePixel = 0
+        frame.Parent = notifContainer
+        applyStyle(frame, 10)
 
-	task.delay(5, function()
-		local t = TweenService:Create(frame, TweenInfo.new(0.5), {BackgroundTransparency = 1})
-		t:Play()
-		t.Completed:Wait()
-		frame:Destroy()
-	end)
+        local img = Instance.new("ImageLabel")
+        img.Size = UDim2.new(0.8, 0, 0.8, 0)
+        img.Position = UDim2.new(0.05, 0, 0.1, 0)
+        img.Image = Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size150x150)
+        img.BackgroundTransparency = 1
+        img.Parent = frame
+        applyStyle(img, 100)
+
+        local aspect = Instance.new("UIAspectRatioConstraint")
+        aspect.AspectRatio = 1
+        aspect.Parent = img
+
+        local txt = Instance.new("TextLabel")
+        txt.Size = UDim2.new(0.7, 0, 0.8, 0)
+        txt.Position = UDim2.new(0.28, 0, 0.1, 0)
+        txt.Text = msg
+        txt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        txt.Font = Enum.Font.FredokaOne
+        txt.TextScaled = true
+        txt.BackgroundTransparency = 1
+        txt.Parent = frame
+
+        task.delay(5, function()
+                local t = TweenService:Create(frame, TweenInfo.new(0.5), {BackgroundTransparency = 1})
+                t:Play()
+                t.Completed:Wait()
+                frame:Destroy()
+        end)
 end
 
 local openBtn = Instance.new("ImageButton")
@@ -147,22 +146,22 @@ mainFrame.Parent = screenGui
 applyStyle(mainFrame, 20)
 
 local function toggleMenu()
-	squish(openBtn)
-	if not mainFrame.Visible then
-		mainFrame.Visible = true
-		TweenService:Create(mainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {GroupTransparency = 0}):Play()
-		TweenService:Create(blurEffect, TweenInfo.new(0.4), {Size = 15}):Play()
-	else
-		local tFade = TweenService:Create(mainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {GroupTransparency = 1})
-		TweenService:Create(blurEffect, TweenInfo.new(0.4), {Size = 0}):Play()
-		
-		tFade:Play()
-		tFade.Completed:Wait()
-		mainFrame.Visible = false
-	end
+        squish(openBtn)
+        if not mainFrame.Visible then
+                mainFrame.Visible = true
+                TweenService:Create(mainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {GroupTransparency = 0}):Play()
+                TweenService:Create(blurEffect, TweenInfo.new(0.4), {Size = 15}):Play()
+        else
+                local tFade = TweenService:Create(mainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {GroupTransparency = 1})
+                TweenService:Create(blurEffect, TweenInfo.new(0.4), {Size = 0}):Play()
+
+                tFade:Play()
+                tFade.Completed:Wait()
+                mainFrame.Visible = false
+        end
 end
 
-openBtn.MouseButton1Click.Connect(toggleMenu)
+openBtn.MouseButton1Click:Connect(toggleMenu)
 
 local topBar = Instance.new("Frame")
 topBar.Size = UDim2.new(1, 0, 0.18, 0)
@@ -209,34 +208,34 @@ layout.Padding = UDim.new(0.02, 0)
 
 local pages = {}
 local function createPage(name, isScrolling)
-	local container = Instance.new("Frame")
-	container.Name = name
-	container.Size = UDim2.new(0.88, 0, 0.82, 0)
-	container.Position = UDim2.new(0.12, 0, 0.18, 0)
-	container.BackgroundTransparency = 1
-	container.Visible = false
-	container.ZIndex = 1
-	container.Parent = mainFrame
-	
-	local pg
-	if isScrolling then
-		pg = Instance.new("ScrollingFrame")
-		pg.Size = UDim2.new(1, 0, 1, 0)
-		pg.AutomaticCanvasSize = Enum.AutomaticSize.Y
-		pg.CanvasSize = UDim2.new(0, 0, 0, 0)
-		pg.ScrollBarThickness = 4
-		pg.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
-		pg.BackgroundTransparency = 1
-		pg.BorderSizePixel = 0
-		pg.ZIndex = 2
-		pg.Parent = container
-	else
-		pg = container
-		pg.ZIndex = 2
-	end
-	
-	pages[name] = container
-	return pg
+        local container = Instance.new("Frame")
+        container.Name = name
+        container.Size = UDim2.new(0.88, 0, 0.82, 0)
+        container.Position = UDim2.new(0.12, 0, 0.18, 0)
+        container.BackgroundTransparency = 1
+        container.Visible = false
+        container.ZIndex = 1
+        container.Parent = mainFrame
+
+        local pg
+        if isScrolling then
+                pg = Instance.new("ScrollingFrame")
+                pg.Size = UDim2.new(1, 0, 1, 0)
+                pg.AutomaticCanvasSize = Enum.AutomaticSize.Y
+                pg.CanvasSize = UDim2.new(0, 0, 0, 0)
+                pg.ScrollBarThickness = 4
+                pg.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
+                pg.BackgroundTransparency = 1
+                pg.BorderSizePixel = 0
+                pg.ZIndex = 2
+                pg.Parent = container
+        else
+                pg = container
+                pg.ZIndex = 2
+        end
+
+        pages[name] = container
+        return pg
 end
 
 local homePg = createPage("Inicio", false)
@@ -245,28 +244,28 @@ local playPg = createPage("Play", false)
 local extraPg = createPage("Info", false)
 
 local function showPage(name, title, info)
-	for _, pg in pairs(pages) do pg.Visible = false end
-	pages[name].Visible = true
-	titleTxt.Text = title
-	infoTxt.Text = info
+        for _, pg in pairs(pages) do pg.Visible = false end
+        pages[name].Visible = true
+        titleTxt.Text = title
+        infoTxt.Text = info
 end
 
 local function createNavBtn(txt, target, title, info)
-	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(0.85, 0, 0.15, 0)
-	btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	btn.Text = txt
-	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-	btn.Font = Enum.Font.FredokaOne
-	btn.TextScaled = true
-	btn.BorderSizePixel = 0
-	btn.ZIndex = 11
-	btn.Parent = sideBar
-	applyStyle(btn, 10)
-	btn.MouseButton1Click.Connect(function()
-		squish(btn)
-		showPage(target, title, info)
-	end)
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(0.85, 0, 0.15, 0)
+        btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        btn.Text = txt
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.Font = Enum.Font.FredokaOne
+        btn.TextScaled = true
+        btn.BorderSizePixel = 0
+        btn.ZIndex = 11
+        btn.Parent = sideBar
+        applyStyle(btn, 10)
+        btn.MouseButton1Click:Connect(function()
+                squish(btn)
+                showPage(target, title, info)
+        end)
 end
 
 createNavBtn("🏠", "Inicio", "I N I C I O", "PÁGINA PRINCIPAL")
@@ -333,7 +332,7 @@ local tAspect = Instance.new("UIAspectRatioConstraint")
 tAspect.AspectRatio = 1
 tAspect.Parent = tralaleritoImg
 
-tralaleritoImg.MouseButton1Click.Connect(function() squish(tralaleritoImg) end)
+tralaleritoImg.MouseButton1Click:Connect(function() squish(tralaleritoImg) end)
 
 local musicList = Instance.new("UIListLayout")
 musicList.Parent = musicPg
@@ -344,27 +343,27 @@ local currentSound = nil
 local isLooping = false
 
 local function createMusicBtn(name, id)
-	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(0.9, 0, 0.08, 0)
-	btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	btn.Text = "Play: " .. name
-	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-	btn.Font = Enum.Font.FredokaOne
-	btn.TextScaled = true
-	btn.BorderSizePixel = 0
-	btn.ZIndex = 3
-	btn.Parent = musicPg
-	applyStyle(btn, 10)
-	btn.MouseButton1Click.Connect(function()
-		squish(btn)
-		if currentSound then currentSound:Stop() currentSound:Destroy() end
-		currentSound = Instance.new("Sound")
-		currentSound.SoundId = "rbxassetid://" .. id
-		currentSound.Volume = musicPg:GetAttribute("HubVol") or 0.5
-		currentSound.Looped = isLooping
-		currentSound.Parent = SoundService
-		currentSound:Play()
-	end)
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(0.9, 0, 0.08, 0)
+        btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        btn.Text = "Play: " .. name
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.Font = Enum.Font.FredokaOne
+        btn.TextScaled = true
+        btn.BorderSizePixel = 0
+        btn.ZIndex = 3
+        btn.Parent = musicPg
+        applyStyle(btn, 10)
+        btn.MouseButton1Click:Connect(function()
+                squish(btn)
+                if currentSound then currentSound:Stop() currentSound:Destroy() end
+                currentSound = Instance.new("Sound")
+                currentSound.SoundId = "rbxassetid://" .. id
+                currentSound.Volume = musicPg:GetAttribute("HubVol") or 0.5
+                currentSound.Looped = isLooping
+                currentSound.Parent = SoundService
+                currentSound:Play()
+        end)
 end
 
 createMusicBtn("hotel", "1839029458")
@@ -411,71 +410,71 @@ loopHandle.ZIndex = 5
 loopHandle.Parent = loopBar
 applyStyle(loopHandle, 100)
 
-loopHandle.MouseButton1Click.Connect(function()
-	clickSound:Play()
-	isLooping = not isLooping
-	local targetPos = isLooping and UDim2.new(0.5, 0, 0.5, 0) or UDim2.new(0, 0, 0.5, 0)
-	local targetCol = isLooping and Color3.fromRGB(0, 100, 0) or Color3.fromRGB(50, 0, 0)
-	TweenService:Create(loopHandle, TweenInfo.new(0.2), {Position = targetPos}):Play()
-	TweenService:Create(loopBar, TweenInfo.new(0.2), {BackgroundColor3 = targetCol}):Play()
-	if currentSound then currentSound.Looped = isLooping end
+loopHandle.MouseButton1Click:Connect(function()
+        clickSound:Play()
+        isLooping = not isLooping
+        local targetPos = isLooping and UDim2.new(0.5, 0, 0.5, 0) or UDim2.new(0, 0, 0.5, 0)
+        local targetCol = isLooping and Color3.fromRGB(0, 100, 0) or Color3.fromRGB(50, 0, 0)
+        TweenService:Create(loopHandle, TweenInfo.new(0.2), {Position = targetPos}):Play()
+        TweenService:Create(loopBar, TweenInfo.new(0.2), {BackgroundColor3 = targetCol}):Play()
+        if currentSound then currentSound.Looped = isLooping end
 end)
 
 local function createSlider(label, callback)
-	local container = Instance.new("Frame")
-	container.Size = UDim2.new(0.9, 0, 0.12, 0)
-	container.BackgroundTransparency = 1
-	container.ZIndex = 3
-	container.Parent = musicPg
-	local txt = Instance.new("TextLabel")
-	txt.Size = UDim2.new(1, 0, 0.4, 0)
-	txt.Text = label
-	txt.TextColor3 = Color3.fromRGB(255, 255, 255)
-	txt.Font = Enum.Font.FredokaOne
-	txt.TextScaled = true
-	txt.BackgroundTransparency = 1
-	txt.ZIndex = 4
-	txt.Parent = container
-	local bar = Instance.new("Frame")
-	bar.Size = UDim2.new(1, 0, 0.2, 0)
-	bar.Position = UDim2.new(0, 0, 0.6, 0)
-	bar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	bar.ZIndex = 4
-	bar.Parent = container
-	applyStyle(bar, 100)
-	local handle = Instance.new("TextButton")
-	handle.Size = UDim2.new(0.1, 0, 2.5, 0)
-	handle.AnchorPoint = Vector2.new(0.5, 0.5)
-	handle.Position = UDim2.new(0.5, 0, 0.5, 0)
-	handle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	handle.BorderSizePixel = 0
-	handle.Text = ""
-	handle.ZIndex = 5
-	handle.Parent = bar
-	applyStyle(handle, 100)
-	local dragging = false
-	handle.MouseButton1Down.Connect(function() dragging = true end)
-	UserInputService.InputEnded.Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then dragging = false end end)
-	RunService.RenderStepped.Connect(function()
-		if dragging then
-			local mousePos = UserInputService:GetMouseLocation().X
-			local relativePos = math.clamp((mousePos - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
-			handle.Position = UDim2.new(relativePos, 0, 0.5, 0)
-			callback(relativePos)
-		end
-	end)
+        local container = Instance.new("Frame")
+        container.Size = UDim2.new(0.9, 0, 0.12, 0)
+        container.BackgroundTransparency = 1
+        container.ZIndex = 3
+        container.Parent = musicPg
+        local txt = Instance.new("TextLabel")
+        txt.Size = UDim2.new(1, 0, 0.4, 0)
+        txt.Text = label
+        txt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        txt.Font = Enum.Font.FredokaOne
+        txt.TextScaled = true
+        txt.BackgroundTransparency = 1
+        txt.ZIndex = 4
+        txt.Parent = container
+        local bar = Instance.new("Frame")
+        bar.Size = UDim2.new(1, 0, 0.2, 0)
+        bar.Position = UDim2.new(0, 0, 0.6, 0)
+        bar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        bar.ZIndex = 4
+        bar.Parent = container
+        applyStyle(bar, 100)
+        local handle = Instance.new("TextButton")
+        handle.Size = UDim2.new(0.1, 0, 2.5, 0)
+        handle.AnchorPoint = Vector2.new(0.5, 0.5)
+        handle.Position = UDim2.new(0.5, 0, 0.5, 0)
+        handle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        handle.BorderSizePixel = 0
+        handle.Text = ""
+        handle.ZIndex = 5
+        handle.Parent = bar
+        applyStyle(handle, 100)
+        local dragging = false
+        handle.MouseButton1Down:Connect(function() dragging = true end)
+        UserInputService.InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then dragging = false end end)
+        RunService.RenderStepped:Connect(function()
+                if dragging then
+                        local mousePos = UserInputService:GetMouseLocation().X
+                        local relativePos = math.clamp((mousePos - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
+                        handle.Position = UDim2.new(relativePos, 0, 0.5, 0)
+                        callback(relativePos)
+                end
+        end)
 end
 
 musicPg:SetAttribute("HubVol", 0.5)
 createSlider("VOL HUB", function(v)
-	musicPg:SetAttribute("HubVol", v)
-	if currentSound then currentSound.Volume = v end
+        musicPg:SetAttribute("HubVol", v)
+        if currentSound then currentSound.Volume = v end
 end)
 
 createSlider("VOL JUEGO", function(v)
-	for _, s in pairs(game:GetDescendants()) do
-		if s:IsA("Sound") and s ~= currentSound then s.Volume = v end
-	end
+        for _, s in pairs(game:GetDescendants()) do
+                if s:IsA("Sound") and s ~= currentSound then s.Volume = v end
+        end
 end)
 
 local infoLayout = Instance.new("UIListLayout")
@@ -484,15 +483,15 @@ infoLayout.Padding = UDim.new(0.02, 0)
 infoLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
 local function createInfoLine(t1, t2)
-	local l = Instance.new("TextLabel")
-	l.Size = UDim2.new(0.9, 0, 0.1, 0)
-	l.BackgroundTransparency = 1
-	l.Font = Enum.Font.FredokaOne
-	l.TextColor3 = Color3.fromRGB(255, 255, 255)
-	l.TextScaled = true
-	l.ZIndex = 3
-	l.Text = t1 .. ": " .. (t2 or "")
-	l.Parent = extraPg
+        local l = Instance.new("TextLabel")
+        l.Size = UDim2.new(0.9, 0, 0.1, 0)
+        l.BackgroundTransparency = 1
+        l.Font = Enum.Font.FredokaOne
+        l.TextColor3 = Color3.fromRGB(255, 255, 255)
+        l.TextScaled = true
+        l.ZIndex = 3
+        l.Text = t1 .. ": " .. (t2 or "")
+        l.Parent = extraPg
 end
 
 createInfoLine("CREADOR", "Patricio")
@@ -507,16 +506,16 @@ statsLayout.Padding = UDim.new(0.05, 0)
 statsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
 local function createStat(label)
-	local txt = Instance.new("TextLabel")
-	txt.Size = UDim2.new(0.9, 0, 0.1, 0)
-	txt.Font = Enum.Font.FredokaOne
-	txt.TextScaled = true
-	txt.BackgroundTransparency = 1
-	txt.TextColor3 = Color3.fromRGB(255, 255, 255)
-	txt.ZIndex = 3
-	txt.Text = label .. ": 0"
-	txt.Parent = playPg
-	return txt
+        local txt = Instance.new("TextLabel")
+        txt.Size = UDim2.new(0.9, 0, 0.1, 0)
+        txt.Font = Enum.Font.FredokaOne
+        txt.TextScaled = true
+        txt.BackgroundTransparency = 1
+        txt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        txt.ZIndex = 3
+        txt.Text = label .. ": 0"
+        txt.Parent = playPg
+        return txt
 end
 
 local distStat = createStat("Distancia")
@@ -528,77 +527,28 @@ local lastPos = nil
 local isJumping = false
 
 local function connectChar(char)
-	local hum = char:WaitForChild("Humanoid")
-	lastPos = char.PrimaryPart.Position
-	hum.StateChanged.Connect(function(_, newState)
-		if newState == Enum.HumanoidStateType.Jumping and not isJumping then
-			isJumping = true
-			totalJumps = totalJumps + 1
-			jumpStat.Text = "Saltos: " .. totalJumps
-			task.wait(0.5)
-			isJumping = false
-		end
-	end)
+        local hum = char:WaitForChild("Humanoid")
+        lastPos = char.PrimaryPart.Position
+        hum.StateChanged:Connect(function(_, newState)
+                if newState == Enum.HumanoidStateType.Jumping and not isJumping then
+                        isJumping = true
+                        totalJumps = totalJumps + 1
+                        jumpStat.Text = "Saltos: " .. totalJumps
+                        task.wait(0.5)
+                        isJumping = false
+                end
+        end)
 end
 
 if player.Character then connectChar(player.Character) end
-player.CharacterAdded.Connect(connectChar)
+player.CharacterAdded:Connect(connectChar)
 
-UserInputService.InputBegan.Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-		totalTouches = totalTouches + 1
-		touchStat.Text = "Toques: " .. totalTouches
-	end
+UserInputService.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+                totalTouches = totalTouches + 1
+                touchStat.Text = "Toques: " .. totalTouches
+        end
 end)
 
-local songList = {"1839029458", "15689459403", "1848354536", "76908132937245", "110788401793874", "82023266189604", "137193013430017"}
-
-Players.PlayerAdded.Connect(function(p)
-	sendNotification(p.Name .. " se unió", p.UserId)
-	if player:IsFriendsWith(p.UserId) then
-		pcall(function()
-			HapticService:SetMotor(Enum.UserInputType.Gamepad1, Enum.VibrationMotor.Large, 1)
-			task.delay(1, function() HapticService:SetMotor(Enum.UserInputType.Gamepad1, Enum.VibrationMotor.Large, 0) end)
-		end)
-		if currentSound then currentSound:Stop() currentSound:Destroy() end
-		currentSound = Instance.new("Sound")
-		currentSound.SoundId = "rbxassetid://" .. songList[math.random(1, #songList)]
-		currentSound.Volume = musicPg:GetAttribute("HubVol") or 0.5
-		currentSound.Looped = isLooping
-		currentSound.Parent = SoundService
-		currentSound:Play()
-	end
-end)
-
-Players.PlayerRemoving.Connect(function(p) sendNotification(p.Name .. " salió", p.UserId) end)
-
-local startTime = os.time()
-RunService.RenderStepped.Connect(function()
-	local t = os.date("*t")
-	timeTxt.Text = string.format("Hora: %02d:%02d", t.hour, t.min)
-	local diff = os.time() - startTime
-	sessionTxt.Text = string.format("Time session: %02d:%02d", math.floor(diff/60), diff%60)
-	if player.Character and player.Character.PrimaryPart then
-		local currentPos = player.Character.PrimaryPart.Position
-		if lastPos then
-			totalDist = totalDist + (currentPos - lastPos).Magnitude
-			distStat.Text = string.format("Distancia: %.0f studs", totalDist)
-		end
-		lastPos = currentPos
-	end
-end)
-
-showPage("Inicio", "I N I C I O", "PÁGINA PRINCIPAL")
-
-task.spawn(function()
-	introFrame.Visible = true
-	local fadeIn = TweenService:Create(introImg, TweenInfo.new(0.8), {ImageTransparency = 0})
-	fadeIn:Play()
-	fadeIn.Completed:Wait()
-	task.wait(1.5)
-	local fadeOut = TweenService:Create(introImg, TweenInfo.new(0.8), {ImageTransparency = 1})
-	fadeOut:Play()
-	fadeOut.Completed:Wait()
-	introFrame.Visible = false
-	openBtn.Visible = true
-end)
+Players.PlayerAdded:Connect(function(p) sendNotification(p.Name .. " se unió", p.UserId) end)
+Players.PlayerRemoving:Co
