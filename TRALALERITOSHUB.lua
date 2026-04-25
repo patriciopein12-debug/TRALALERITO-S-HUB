@@ -4,6 +4,7 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local SoundService = game:GetService("SoundService")
 local Lighting = game:GetService("Lighting")
+local HapticService = game:GetService("HapticService")
 
 local player = Players.LocalPlayer
 local pGui = player:WaitForChild("PlayerGui")
@@ -161,7 +162,7 @@ local function toggleMenu()
 	end
 end
 
-openBtn.MouseButton1Click:Connect(toggleMenu)
+openBtn.MouseButton1Click.Connect(toggleMenu)
 
 local topBar = Instance.new("Frame")
 topBar.Size = UDim2.new(1, 0, 0.18, 0)
@@ -262,7 +263,7 @@ local function createNavBtn(txt, target, title, info)
 	btn.ZIndex = 11
 	btn.Parent = sideBar
 	applyStyle(btn, 10)
-	btn.MouseButton1Click:Connect(function()
+	btn.MouseButton1Click.Connect(function()
 		squish(btn)
 		showPage(target, title, info)
 	end)
@@ -332,7 +333,7 @@ local tAspect = Instance.new("UIAspectRatioConstraint")
 tAspect.AspectRatio = 1
 tAspect.Parent = tralaleritoImg
 
-tralaleritoImg.MouseButton1Click:Connect(function() squish(tralaleritoImg) end)
+tralaleritoImg.MouseButton1Click.Connect(function() squish(tralaleritoImg) end)
 
 local musicList = Instance.new("UIListLayout")
 musicList.Parent = musicPg
@@ -354,7 +355,7 @@ local function createMusicBtn(name, id)
 	btn.ZIndex = 3
 	btn.Parent = musicPg
 	applyStyle(btn, 10)
-	btn.MouseButton1Click:Connect(function()
+	btn.MouseButton1Click.Connect(function()
 		squish(btn)
 		if currentSound then currentSound:Stop() currentSound:Destroy() end
 		currentSound = Instance.new("Sound")
@@ -410,7 +411,7 @@ loopHandle.ZIndex = 5
 loopHandle.Parent = loopBar
 applyStyle(loopHandle, 100)
 
-loopHandle.MouseButton1Click:Connect(function()
+loopHandle.MouseButton1Click.Connect(function()
 	clickSound:Play()
 	isLooping = not isLooping
 	local targetPos = isLooping and UDim2.new(0.5, 0, 0.5, 0) or UDim2.new(0, 0, 0.5, 0)
@@ -453,9 +454,9 @@ local function createSlider(label, callback)
 	handle.Parent = bar
 	applyStyle(handle, 100)
 	local dragging = false
-	handle.MouseButton1Down:Connect(function() dragging = true end)
-	UserInputService.InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then dragging = false end end)
-	RunService.RenderStepped:Connect(function()
+	handle.MouseButton1Down.Connect(function() dragging = true end)
+	UserInputService.InputEnded.Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then dragging = false end end)
+	RunService.RenderStepped.Connect(function()
 		if dragging then
 			local mousePos = UserInputService:GetMouseLocation().X
 			local relativePos = math.clamp((mousePos - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
@@ -529,7 +530,7 @@ local isJumping = false
 local function connectChar(char)
 	local hum = char:WaitForChild("Humanoid")
 	lastPos = char.PrimaryPart.Position
-	hum.StateChanged:Connect(function(_, newState)
+	hum.StateChanged.Connect(function(_, newState)
 		if newState == Enum.HumanoidStateType.Jumping and not isJumping then
 			isJumping = true
 			totalJumps = totalJumps + 1
@@ -541,20 +542,38 @@ local function connectChar(char)
 end
 
 if player.Character then connectChar(player.Character) end
-player.CharacterAdded:Connect(connectChar)
+player.CharacterAdded.Connect(connectChar)
 
-UserInputService.InputBegan:Connect(function(input)
+UserInputService.InputBegan.Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
 		totalTouches = totalTouches + 1
 		touchStat.Text = "Toques: " .. totalTouches
 	end
 end)
 
-Players.PlayerAdded:Connect(function(p) sendNotification(p.Name .. " se unió", p.UserId) end)
-Players.PlayerRemoving:Connect(function(p) sendNotification(p.Name .. " salió", p.UserId) end)
+local songList = {"1839029458", "15689459403", "1848354536", "76908132937245", "110788401793874", "82023266189604", "137193013430017"}
+
+Players.PlayerAdded.Connect(function(p)
+	sendNotification(p.Name .. " se unió", p.UserId)
+	if player:IsFriendsWith(p.UserId) then
+		pcall(function()
+			HapticService:SetMotor(Enum.UserInputType.Gamepad1, Enum.VibrationMotor.Large, 1)
+			task.delay(1, function() HapticService:SetMotor(Enum.UserInputType.Gamepad1, Enum.VibrationMotor.Large, 0) end)
+		end)
+		if currentSound then currentSound:Stop() currentSound:Destroy() end
+		currentSound = Instance.new("Sound")
+		currentSound.SoundId = "rbxassetid://" .. songList[math.random(1, #songList)]
+		currentSound.Volume = musicPg:GetAttribute("HubVol") or 0.5
+		currentSound.Looped = isLooping
+		currentSound.Parent = SoundService
+		currentSound:Play()
+	end
+end)
+
+Players.PlayerRemoving.Connect(function(p) sendNotification(p.Name .. " salió", p.UserId) end)
 
 local startTime = os.time()
-RunService.RenderStepped:Connect(function()
+RunService.RenderStepped.Connect(function()
 	local t = os.date("*t")
 	timeTxt.Text = string.format("Hora: %02d:%02d", t.hour, t.min)
 	local diff = os.time() - startTime
